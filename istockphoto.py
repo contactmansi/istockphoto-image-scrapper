@@ -3,6 +3,7 @@ import urllib.parse
 
 class IStockSearch:
     def __init__(self):
+        self.__engine_name = 'istockphoto'
         self.__main_url = 'https://www.istockphoto.com/photos'
 
         self.__total_sort_types = ['best', 'newest', 'mostpopular']
@@ -34,6 +35,10 @@ class IStockSearch:
             self.__sort_type)
         quoted = urllib.parse.quote(self.__search_url, safe=self.__safe_strings)
         return quoted
+
+    @property
+    def engine_name(self):
+        return self.__engine_name
 
     @property
     def main_url(self):

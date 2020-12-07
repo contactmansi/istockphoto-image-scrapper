@@ -12,7 +12,7 @@ class Scrapper:
 	def __init__(self, search_engine: IStockSearch, total_image=1000):
 		self.search_engine = search_engine
 		self.total_image = total_image
-		self.save_path = '_'.join(search_engine.search_query.split())
+		self.save_path = self.search_engine.engine_name + '_' + '_'.join(search_engine.search_query.split())
 
 		if os.path.exists(self.save_path):
 			rmtree(self.save_path, ignore_errors=True)
