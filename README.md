@@ -19,6 +19,7 @@ Istockphoto Scrapper has been built to collect American Sign Language Data as a 
         --search-engine istockphoto \
         --search-query american sign language \
         --total-images 100
+    > $ python3 main.py --search-engine istockphoto  --total-images 10
 
 4. Images will be saved to directory: 
-    > /stock-image-scrapper/istockphoto_asl/
+    > /istockphoto-image-scrapper/istockphoto_asl/
