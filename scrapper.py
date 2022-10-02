@@ -9,10 +9,10 @@ from istockphoto import IStockSearch
 
 
 class Scrapper:
-	def __init__(self, search_engine: IStockSearch, total_image=1000):
+	def __init__(self, search_engine: IStockSearch, total_image=10):
 		self.search_engine = search_engine
 		self.total_image = total_image
-		self.save_path = self.search_engine.engine_name + '_' + '_'.join(search_engine.search_query.split())
+		self.save_path = self.search_engine.engine_name + '_' + 'asl' # Update save_path according to required directory structure
 
 		if os.path.exists(self.save_path):
 			rmtree(self.save_path, ignore_errors=True)
@@ -27,7 +27,13 @@ class Scrapper:
 		self.pbar = tqdm(total=self.total_image, unit='image')
 
 	def url_request(self, page):
-		self.response = self.pool_man.request('GET', self.search_engine.create_search_url(page))
+		# Not using create_search_url() since search_query filterin is not giving effective results
+		# url = self.search_engine.create_search_url(page)
+		
+		# Initialising URL for ASL UseCase with pagination 
+		url = "https://www.istockphoto.com/search/search-by-asset?searchbyasset=true&assettype=image&assetid=1196283839&page={}".format(page)
+		print(url)
+		self.response = self.pool_man.request('GET', url)
 		self.links = self.__bs4_parser()
 		self.response.release_conn()
 
@@ -38,8 +44,9 @@ class Scrapper:
 	def image_url_to_file(self):
 		for link in self.links:
 			im_url = link.get('src')
+			im_caption = link.get('alt') # including image caption in image name
 			im_request = self.pool_man.request('GET', im_url, preload_content=False)
-			with open(os.path.join(self.save_path, f'{self.downloaded_im+1:04}.jpg'), 'wb') as out:
+			with open(os.path.join(self.save_path, f'{im_caption}_{self.downloaded_im+1:04}.jpg'), 'wb') as out:
 				while True:
 					data = im_request.read(256)
 					if not data:
@@ -47,7 +54,7 @@ class Scrapper:
 					out.write(data)
 			self.downloaded_im += 1
 			self.pbar.update(1)
-			if self.downloaded_im == self.total_image:
+			if self.downloaded_im >= self.total_image:
 				break
 			im_request.release_conn()
 
@@ -76,7 +83,7 @@ class Scrapper:
 			print(f'Scrap failed! {self.downloaded_im}/{self.total_image}')
 
 	def print_scrap_conf(self):
-		print(f'\nSearch engine: \t\t\t\t{self.search_engine}')
+		print(f'\nSearch engine: \t\t{self.search_engine}')
 		print(f'Search engine sort method: \t{self.search_engine.sort_type}')
 		print(f'Total image request: \t\t{self.total_image}')
-		print(f'Save path: \t\t\t\t\t{self.save_path}\n')
+		print(f'Save path: \t\t\{self.save_path}\n')

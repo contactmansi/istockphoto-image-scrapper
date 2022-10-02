@@ -1,2 +1,6 @@
 # Project exclude paths
 /venv/
+/__pycache__/
+/.ipynb_checkpoints/
+/.DS_Store/
+/.DS_Store

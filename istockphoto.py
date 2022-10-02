@@ -15,12 +15,13 @@ class IStockSearch:
 
         self.__attr_name = 'img'
         self.__image_extension = 'jpg'
-        self.__attr_dict = {'class': 'gallery-asset__thumb gallery-mosaic-asset__thumb'}
+        # Updated __attr_dict class value according to latest 'img' tag html from istock page source
+        self.__attr_dict = {'class': 'MosaicAsset-module__thumb___klD9E'}
 
     def __str__(self):
         return "iStock Photo - https://www.istockphoto.com/"
 
-    def set_search_param(self, search_query: str, sort_type='mostpopular'):
+    def set_search_param(self, search_query: str, sort_type='best'):
         assert sort_type in self.__total_sort_types
         self.__search_query = search_query
         self.__sort_type = sort_type
