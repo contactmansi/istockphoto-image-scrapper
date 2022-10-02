@@ -32,7 +32,6 @@ class Scrapper:
 		
 		# Initialising URL for ASL UseCase with pagination 
 		url = "https://www.istockphoto.com/search/search-by-asset?searchbyasset=true&assettype=image&assetid=1196283839&page={}".format(page)
-		print(url)
 		self.response = self.pool_man.request('GET', url)
 		self.links = self.__bs4_parser()
 		self.response.release_conn()
